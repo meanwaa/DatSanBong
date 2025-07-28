@@ -1,0 +1,416 @@
+@{
+    ViewBag.Title = "Trang quản trị";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="admin-dashboard">
+    <!-- Header Section -->
+    <div class="dashboard-header mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="dashboard-title">
+                    <i class="fas fa-tachometer-alt me-3"></i>
+                    Chào mừng đến trang quản trị!
+                </h1>
+                <p class="dashboard-subtitle text-muted">Quản lý và theo dõi hoạt động hệ thống sân bóng</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="dashboard-time">
+                    <small class="text-muted">Cập nhật lần cuối:</small>
+                    <br>
+                    <span class="fw-bold" id="lastUpdate"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="dashboard-divider mb-5" />
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-5">
+        <!-- Users Card -->
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="stats-icon bg-primary bg-gradient rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="fas fa-users text-white"></i>
+                        </div>
+                        <div class="text-end">
+                            <h3 class="stats-number text-primary mb-0">@ViewBag.TotalUsers</h3>
+                            <small class="text-muted">Người dùng</small>
+                        </div>
+                    </div>
+                    <h6 class="card-title mb-2">Tổng số người dùng</h6>
+                    <p class="card-text text-muted small mb-3">Quản lý tất cả tài khoản người dùng trong hệ thống.</p>
+                    <div class="d-grid">
+                        @Html.ActionLink("Xem chi tiết", "Users", null, new { @class = "btn btn-outline-primary btn-sm fw-bold" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fields Card -->
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="stats-icon bg-success bg-gradient rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="fas fa-futbol text-white"></i>
+                        </div>
+                        <div class="text-end">
+                            <h3 class="stats-number text-success mb-0">@ViewBag.TotalFields</h3>
+                            <small class="text-muted">Sân bóng</small>
+                        </div>
+                    </div>
+                    <h6 class="card-title mb-2">Tổng số sân bóng</h6>
+                    <p class="card-text text-muted small mb-3">Quản lý thông tin và trạng thái các sân bóng.</p>
+                    <div class="d-grid">
+                        @Html.ActionLink("Xem chi tiết", "Fields", null, new { @class = "btn btn-outline-success btn-sm fw-bold" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Bookings Card -->
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="stats-icon bg-warning bg-gradient rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="fas fa-clock text-white"></i>
+                        </div>
+                        <div class="text-end">
+                            <h3 class="stats-number text-warning mb-0">@ViewBag.PendingBookings</h3>
+                            <small class="text-muted">Chờ duyệt</small>
+                        </div>
+                    </div>
+                    <h6 class="card-title mb-2">Đơn đặt sân chờ duyệt</h6>
+                    <p class="card-text text-muted small mb-3">Duyệt hoặc từ chối các đơn đặt sân mới.</p>
+                    <div class="d-grid">
+                        @Html.ActionLink("Xem chi tiết", "Bookings", new { statusFilter = "Chờ duyệt" }, new { @class = "btn btn-outline-warning btn-sm fw-bold" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Bookings Card -->
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="stats-icon bg-info bg-gradient rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="fas fa-calendar-check text-white"></i>
+                        </div>
+                        <div class="text-end">
+                            <h3 class="stats-number text-info mb-0">@ViewBag.TotalBookings</h3>
+                            <small class="text-muted">Đơn đặt</small>
+                        </div>
+                    </div>
+                    <h6 class="card-title mb-2">Tổng số đơn đặt sân</h6>
+                    <p class="card-text text-muted small mb-3">Xem tất cả các đơn đặt sân trong hệ thống.</p>
+                    <div class="d-grid">
+                        @Html.ActionLink("Xem chi tiết", "Bookings", null, new { @class = "btn btn-outline-info btn-sm fw-bold" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Sections -->
+    <div class="row g-4">
+        <!-- Operations Management -->
+        <div class="col-lg-8">
+            <div class="section-card card border-0 shadow-sm mb-4">
+                <div class="card-header bg-transparent border-0 pb-0">
+                    <h5 class="section-title mb-0">
+                        <i class="fas fa-cogs me-2 text-primary"></i>
+                        Quản lý vận hành
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="management-card card border h-100">
+                                <div class="card-body text-center p-4">
+                                    <div class="management-icon mb-3">
+                                        <i class="fas fa-exclamation-triangle text-danger fa-2x"></i>
+                                    </div>
+                                    <h6 class="card-title">Báo cáo sự cố</h6>
+                                    <p class="card-text text-muted small">Quản lý các báo cáo sự cố từ người dùng</p>
+                                    @Html.ActionLink("Xem chi tiết", "Incidents", null, new { @class = "btn btn-outline-danger btn-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="management-card card border h-100">
+                                <div class="card-body text-center p-4">
+                                    <div class="management-icon mb-3">
+                                        <i class="fas fa-user-tie text-secondary fa-2x"></i>
+                                    </div>
+                                    <h6 class="card-title">Phân công nhân viên</h6>
+                                    <p class="card-text text-muted small">Phân công nhiệm vụ cho nhân viên</p>
+                                    @Html.ActionLink("Xem chi tiết", "StaffAssignments", null, new { @class = "btn btn-outline-secondary btn-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="col-lg-4">
+            <div class="section-card card border-0 shadow-sm mb-4">
+                <div class="card-header bg-transparent border-0 pb-0">
+                    <h5 class="section-title mb-0">
+                        <i class="fas fa-chart-line me-2 text-success"></i>
+                        Báo cáo & Thống kê
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="management-card card border h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="management-icon mb-3">
+                                <i class="fas fa-chart-bar text-dark fa-2x"></i>
+                            </div>
+                            <h6 class="card-title">Tổng quan báo cáo</h6>
+                            <p class="card-text text-muted small">Xem các báo cáo về doanh thu, hoạt động</p>
+                            @Html.ActionLink("Xem chi tiết", "Reports", null, new { @class = "btn btn-outline-dark btn-sm" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Configuration -->
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="section-card card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0 pb-0">
+                    <h5 class="section-title mb-0">
+                        <i class="fas fa-sliders-h me-2 text-info"></i>
+                        Cấu hình hệ thống
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-lg-3 col-md-6">
+                            <div class="config-card card border h-100">
+                                <div class="card-body text-center p-3">
+                                    <div class="config-icon mb-2">
+                                        <i class="fas fa-layer-group text-primary"></i>
+                                    </div>
+                                    <h6 class="card-title small">Loại sân</h6>
+                                    <p class="card-text text-muted" style="font-size: 0.8rem;">Quản lý các loại sân bóng</p>
+                                    @Html.ActionLink("Quản lý", "LoaiSanBongs", null, new { @class = "btn btn-outline-primary btn-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="config-card card border h-100">
+                                <div class="card-body text-center p-3">
+                                    <div class="config-icon mb-2">
+                                        <i class="fas fa-star text-success"></i>
+                                    </div>
+                                    <h6 class="card-title small">Tiện ích</h6>
+                                    <p class="card-text text-muted" style="font-size: 0.8rem;">Quản lý tiện ích sân bóng</p>
+                                    @Html.ActionLink("Quản lý", "TienIchSanBongs", null, new { @class = "btn btn-outline-success btn-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="config-card card border h-100">
+                                <div class="card-body text-center p-3">
+                                    <div class="config-icon mb-2">
+                                        <i class="fas fa-credit-card text-warning"></i>
+                                    </div>
+                                    <h6 class="card-title small">PTTT</h6>
+                                    <p class="card-text text-muted" style="font-size: 0.8rem;">Phương thức thanh toán</p>
+                                    @Html.ActionLink("Quản lý", "PaymentMethods", null, new { @class = "btn btn-outline-warning btn-sm" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="config-card card border h-100">
+                                <div class="card-body text-center p-3">
+                                    <div class="config-icon mb-2">
+                                        <i class="fas fa-tasks text-info"></i>
+                                    </div>
+                                    <h6 class="card-title small">Trạng thái đơn</h6>
+                                    <p class="card-text text-muted" style="font-size: 0.8rem;">Trạng thái đơn đặt sân</p>
+                                    @Html.ActionLink("Quản lý", "BookingStatuses", null, new { @class = "btn btn-outline-info btn-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.admin-dashboard {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.dashboard-header {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    margin-bottom: 2rem;
+}
+
+.dashboard-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+.dashboard-divider {
+    border: none;
+    height: 3px;
+    background: linear-gradient(90deg, #007bff, #28a745, #ffc107, #17a2b8);
+    border-radius: 2px;
+}
+
+.stats-card {
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.stats-icon {
+    width: 50px;
+    height: 50px;
+}
+
+.stats-number {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.section-card {
+    background: white;
+}
+
+.section-title {
+    color: #495057;
+    font-weight: 600;
+}
+
+.management-card {
+    transition: all 0.3s ease;
+    background: #fafafa;
+}
+
+.management-card:hover {
+    background: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.management-icon {
+    margin-bottom: 1rem;
+}
+
+.config-card {
+    transition: all 0.3s ease;
+    background: #fafafa;
+}
+
+.config-card:hover {
+    background: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.config-icon {
+    font-size: 1.5rem;
+}
+
+.btn {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.card {
+    border-radius: 12px;
+}
+
+.dashboard-time {
+    background: rgba(0, 123, 255, 0.1);
+    padding: 1rem;
+    border-radius: 10px;
+    border-left: 4px solid #007bff;
+}
+
+@media (max-width: 768px) {
+    .dashboard-header {
+        padding: 1.5rem;
+    }
+    
+    .dashboard-title {
+        font-size: 1.5rem;
+    }
+    
+    .stats-number {
+        font-size: 1.5rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Update time display
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleString('vi-VN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+        document.getElementById('lastUpdate').textContent = timeString;
+    }
+    
+    updateTime();
+    setInterval(updateTime, 1000);
+    
+    // Add loading animation for action links
+    document.querySelectorAll('a[href]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (!this.classList.contains('btn')) return;
+            
+            const originalText = this.textContent;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Đang tải...';
+            this.style.pointerEvents = 'none';
+            
+            setTimeout(() => {
+                this.textContent = originalText;
+                this.style.pointerEvents = 'auto';
+            }, 1500);
+        });
+    });
+});
+</script>
